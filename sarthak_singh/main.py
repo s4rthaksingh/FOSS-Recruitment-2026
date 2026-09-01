@@ -14,6 +14,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
+    await bot.load_extension("cogs.maincog")
     await bot.tree.sync()
     print(f"Logged in as {bot.user.name}")
 
@@ -21,10 +22,11 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send(f"Pong! {round(bot.latency*1000)}ms")
 
-@bot.tree.command(name="start")
-@app_commands.describe(gangster_name="Your gangster name", gang_name="Your gang name")
-async def start(interaction: discord.Interaction, gangster_name: str, gang_name: str):
-    await interaction.response.send_message(f"Don {gangster_name} sends his regards from {gang_name}.")
+@bot.command()
+@commands.is_owner()
+async def reload(ctx: commands.Context):
+    await bot.reload_extension("cogs.maincog")
+    await ctx.send(f"Successfully reloaded cogs!")
 
 
 bot.run(TOKEN)
