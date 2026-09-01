@@ -16,7 +16,7 @@ class MainCog(commands.Cog):
         embed = discord.Embed(title="Welcome to The Underboss!", description="A crime simulation gamebot where you run your own crime syndicate")
         embed.add_field(name="`!start`", value = "Start your own gang")
         embed.add_field(name="`!stats`", value = "Shows your balance and manpower")
-        embed.add_field(name="`!mug`", value = "Starts a pickpocket minigame")
+        embed.add_field(name="`!mug`", value = "Starts a mugging minigame")
         embed.add_field(name="`!extort`", value = "Extorts a local shop (pay increases with manpower)")
         embed.add_field(name="`!recruit`", value = "Recruits members, each member costs $500")
         await ctx.send(embed=embed)

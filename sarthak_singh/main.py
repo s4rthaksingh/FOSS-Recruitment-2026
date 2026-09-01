@@ -14,6 +14,7 @@ bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
 @bot.event
 async def on_ready():
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="!help"))
     await bot.load_extension("cogs.maincog")
     await bot.tree.sync()
     print(f"Logged in as {bot.user.name}")
