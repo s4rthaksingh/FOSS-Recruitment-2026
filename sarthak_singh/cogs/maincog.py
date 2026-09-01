@@ -37,28 +37,42 @@ class MainCog(commands.Cog):
             gameData[ctx.author.id]["cash"] -= penalty
             await ctx.send(f"You weren't fast enough, you got caught and had to pay {penalty} as penalty")
         else:
-            earned = random.randint(2,5)*100
+            earned = random.randint(50,150)
             gameData[ctx.author.id]["cash"] += earned
             await ctx.send(f"You successfully stole {earned}")
 
 
-    @commands.command(name="cash")
-    async def cash(self, ctx):
+    @commands.command(name="stats")
+    async def stats(self, ctx):
         if ctx.author.id not in gameData:
             return await ctx.send("You do not have a gang yet, try !start")
 
-        await ctx.send(f"Your current balance is {gameData[ctx.author.id]["cash"]}")
+        await ctx.send(f"Your current balance is {gameData[ctx.author.id]["cash"]} and your member count is {gameData[ctx.author.id]["muscle"]}")
 
     @commands.command(name="extort")
     async def extort(self, ctx):
         if random.randint(1,3) == 1:
-            pay = random.randint(1,4)*100
+            muscle_count = gameData[ctx.author.id]["muscle"]
+
+            base_pay = random.randint(50, 150)
+            muscle_pay = muscle_count * random.randint(20, 35)
+
+            pay = base_pay + muscle_pay
+            muscle_bonus = int(math.sqrt(gameData[ctx.author.id]["muscle"]) * 20)
             gameData[ctx.author.id]["cash"] += pay
             await ctx.send(f"The shopkeeper agreed to pay {pay} as protection money")
         else:
-            await ctx.send("The shopkeeper refused to pay protection money, maybe get more manpower?")
+            await ctx.send("The shopkeeper refused to pay protection money.")
 
-
+    @commands.command(name="recruit")
+    async def recruit(self, ctx, count: int = None):
+        if count in [None,0]:
+            return await ctx.send("Use proper syntax: `!recruit <count>`")
+        if count*500>gameData[ctx.author.id]["cash"]:
+            return await ctx.send("You do not have enough cash to recruit these many members")
+        gameData[ctx.author.id]["muscle"] += count
+        gameData[ctx.author.id]["cash"] -= count*500
+        await ctx.send(f"You successfully recruited {count} members")
 
 async def setup(bot):
     await bot.add_cog(MainCog(bot))
