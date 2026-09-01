@@ -10,12 +10,13 @@ class MainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="start")
-    @app_commands.describe(gangster_name="Your gangster name", gang_name="Your gang name")
-    async def start(self, interaction: discord.Interaction, gangster_name: str, gang_name: str):
-        gameData[interaction.user.id] = {"gang": gang_name, "cash" : 10000, "muscle": 1}
+    @commands.command(name="start")
+    async def start(self, ctx, gangster_name: str = None, gang_name: str = None):
+        if gangster_name == None or gang_name == None:
+            return await ctx.send("Use proper syntax: `!start <gangster name> <gang name>`")
+        gameData[ctx.author.id] = {"gang": gang_name, "cash" : 10000, "muscle": 1}
         print(gameData)
-        await interaction.response.send_message(f"Don {gangster_name} sends his regards from {gang_name}.")
+        await ctx.send(f"Don {gangster_name} sends his regards from {gang_name}.")
 
     @commands.command(name="mug")
     async def mug(self, ctx):
@@ -35,6 +36,9 @@ class MainCog(commands.Cog):
             earned = random.randint(2,5)*100
             gameData[ctx.author.id]["cash"] += earned
             await ctx.send(f"You successfully stole {earned}, your current balance is {gameData[ctx.author.id]["cash"]}")
+
+
+    
 
 
 
