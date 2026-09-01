@@ -20,6 +20,8 @@ class MainCog(commands.Cog):
 
     @commands.command(name="mug")
     async def mug(self, ctx):
+        if ctx.author.id not in gameData:
+            return await ctx.send("You do not have a gang yet, try !start")
         msg = await ctx.reply("Wait for the target to look away...")
         await asyncio.sleep(random.randint(2,6))
         await msg.edit(content="🚨 GO! REACT NOW!")
@@ -38,7 +40,12 @@ class MainCog(commands.Cog):
             await ctx.send(f"You successfully stole {earned}, your current balance is {gameData[ctx.author.id]["cash"]}")
 
 
-    
+    @commands.command(name="cash")
+    async def cash(self, ctx):
+        if ctx.author.id not in gameData:
+            return await ctx.send("You do not have a gang yet, try !start")
+
+        await ctx.send(f"Your current balance is {gameData[ctx.author.id]["cash"]}")
 
 
 
